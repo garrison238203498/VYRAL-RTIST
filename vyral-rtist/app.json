@@ -1,0 +1,55 @@
+{
+  "expo": {
+    "name": "Vyral + RTIST",
+    "slug": "vyral-rtist",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "vyralrtist",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Vyral uses the camera to capture handwritten notes, sketches, and study material into your Spaces.",
+        "NSPhotoLibraryUsageDescription": "Vyral imports screenshots and photos so the AI can sort them into Spaces.",
+        "NSMicrophoneUsageDescription": "Vyral records short voice memos so they can be auto-grouped with related notes."
+      }
+    },
+    "android": {
+      "permissions": [
+        "CAMERA",
+        "VIBRATE",
+        "RECORD_AUDIO",
+        "READ_EXTERNAL_STORAGE"
+      ],
+      "adaptiveIcon": {
+        "backgroundColor": "#070814"
+      },
+      "edgeToEdgeEnabled": true
+    },
+    "web": {
+      "bundler": "metro"
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow Vyral to capture handwritten notes, sketches, and study material into your Spaces."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Vyral imports screenshots and photos so the AI can sort them into Spaces."
+        }
+      ],
+      "expo-font",
+      "expo-router",
+      "expo-secure-store"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

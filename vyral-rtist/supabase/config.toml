@@ -1,0 +1,10 @@
+project_id = "ykrjqcvypejvhzwcfntp"
+
+[functions.intake]
+verify_jwt = false
+
+[functions.affinity]
+verify_jwt = false
+
+[functions.space-visual]
+verify_jwt = false

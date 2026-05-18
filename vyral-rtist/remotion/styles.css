@@ -1,0 +1,162 @@
+.scene {
+  align-items: center;
+  color: #f7f7ff;
+  display: flex;
+  font-family: Inter, system-ui, sans-serif;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.scene-space {
+  background: #070814;
+}
+
+.scene-koi {
+  background: #03111f;
+}
+
+.scene-rotist {
+  background: #070910;
+}
+
+.scene-legacy {
+  background: #080916;
+}
+
+.scene-svg {
+  height: 100%;
+  width: 100%;
+}
+
+.fragment {
+  stroke: rgba(255, 255, 255, 0.14);
+  stroke-width: 1;
+}
+
+.fragment-cyan {
+  fill: rgba(38, 214, 232, 0.28);
+}
+
+.fragment-violet {
+  fill: rgba(155, 92, 255, 0.28);
+}
+
+.space-orb {
+  fill: url("#spaceOrbGradient");
+  filter: drop-shadow(0 0 90px rgba(155, 92, 255, 0.4));
+}
+
+.space-orb-ring {
+  fill: none;
+  stroke: #26d6e8;
+  stroke-width: 2;
+}
+
+.space-v {
+  fill: #f7f7ff;
+  font-size: 58px;
+  font-weight: 900;
+}
+
+.space-name {
+  fill: #f7f7ff;
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.pond-ring {
+  fill: none;
+  stroke: rgba(39, 217, 255, 0.42);
+}
+
+.pond-ring-outer {
+  filter: drop-shadow(0 0 70px rgba(39, 217, 255, 0.28));
+  stroke-width: 2;
+}
+
+.pond-ring-inner {
+  stroke-width: 1;
+}
+
+.koi-fish {
+  filter: drop-shadow(0 0 30px currentColor);
+}
+
+.koi-cyan {
+  color: #27d9ff;
+  fill: #27d9ff;
+}
+
+.koi-pink {
+  color: #ff7bb8;
+  fill: #ff7bb8;
+}
+
+.dive-title {
+  fill: #f7f7ff;
+  filter: drop-shadow(0 0 34px rgba(39, 217, 255, 0.7));
+  font-size: 86px;
+  font-weight: 900;
+  letter-spacing: 8px;
+}
+
+.scene-caption {
+  fill: rgba(247, 247, 255, 0.72);
+  font-size: 28px;
+}
+
+.trace-page {
+  fill: rgba(255, 255, 255, 0.06);
+  stroke: rgba(255, 255, 255, 0.12);
+  stroke-width: 1;
+}
+
+.trace-line {
+  filter: drop-shadow(0 0 22px rgba(38, 214, 232, 0.35));
+}
+
+.trace-line-0 {
+  fill: #b7f75a;
+}
+
+.trace-line-1 {
+  fill: #26d6e8;
+}
+
+.trace-line-2 {
+  fill: #9b5cff;
+}
+
+.pressure-pulse {
+  fill: rgba(255, 90, 165, 0.72);
+}
+
+.rotist-title {
+  fill: #f7f7ff;
+  font-size: 34px;
+  font-weight: 900;
+}
+
+.timeline-line {
+  stroke: rgba(247, 247, 255, 0.2);
+  stroke-width: 2;
+}
+
+.memory-card {
+  fill: rgba(255, 255, 255, 0.08);
+  stroke: rgba(255, 211, 106, 0.36);
+  stroke-width: 1;
+}
+
+.memory-kicker {
+  fill: #ffd36a;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 3px;
+}
+
+.memory-title {
+  fill: #f7f7ff;
+  font-size: 34px;
+  font-weight: 900;
+}

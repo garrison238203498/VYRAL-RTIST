@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__8ac1a404-8b88-4330-b1cb-e3945babb83f__get_publishable_keys",
+      "mcp__8ac1a404-8b88-4330-b1cb-e3945babb83f__list_tables",
+      "mcp__8ac1a404-8b88-4330-b1cb-e3945babb83f__list_projects",
+      "mcp__8ac1a404-8b88-4330-b1cb-e3945babb83f__list_organizations",
+      "mcp__8ac1a404-8b88-4330-b1cb-e3945babb83f__restore_project",
+      "mcp__8ac1a404-8b88-4330-b1cb-e3945babb83f__get_project",
+      "mcp__8ac1a404-8b88-4330-b1cb-e3945babb83f__list_migrations",
+      "Bash(npm install *)",
+      "mcp__8ac1a404-8b88-4330-b1cb-e3945babb83f__apply_migration",
+      "mcp__8ac1a404-8b88-4330-b1cb-e3945babb83f__get_project_url",
+      "mcp__8ac1a404-8b88-4330-b1cb-e3945babb83f__get_advisors",
+      "mcp__8ac1a404-8b88-4330-b1cb-e3945babb83f__generate_typescript_types",
+      "Bash(npx tsc *)",
+      "Bash(npm run *)",
+      "mcp__2726598d-3d17-472e-8b61-19f680097a56__list_teams",
+      "Bash(npx --yes vercel whoami)",
+      "Bash(npx --yes vercel deploy --yes --prod --token-less --build-env VITE_SUPABASE_URL=https://yneqeanggdcqftckqzjl.supabase.co --build-env VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_YHlm32W4kBf0QXPo8H1SpA_2CJIVJk5)",
+      "Bash(npx --yes vercel deploy --yes --prod --build-env VITE_SUPABASE_URL=https://yneqeanggdcqftckqzjl.supabase.co --build-env VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_YHlm32W4kBf0QXPo8H1SpA_2CJIVJk5)",
+      "Bash(curl -sI \"https://vyral-rtist.vercel.app/\")",
+      "Bash(curl -s \"https://vyral-rtist.vercel.app/\")",
+      "mcp__2726598d-3d17-472e-8b61-19f680097a56__get_project"
+    ]
+  }
+}
