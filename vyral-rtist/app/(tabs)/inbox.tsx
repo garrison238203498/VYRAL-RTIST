@@ -1,17 +1,21 @@
-// Inbox — placeholder. Future home for DMs, notifications, mentions.
-// Teen-safety note: DMs default to "followers only" for users <18.
+// Inbox — notifications, mentions, DMs.
+// Teen-safety note: DMs default to followers-only for users under 18.
 
+import { useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Animated, { FadeInUp, FadeInDown } from "react-native-reanimated";
-import Svg, { Path, Circle } from "react-native-svg";
-
-const ACCENT = "#a855f7";
+import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
+import Svg, { Path } from "react-native-svg";
+import PressableScale from "../../components/PressableScale";
+import { useAccent } from "../../lib/themeContext";
 
 type Tab = "All" | "Mentions" | "Likes" | "DMs";
 const TABS: Tab[] = ["All", "Mentions", "Likes", "DMs"];
 
 export default function Inbox() {
+  const ACCENT = useAccent("inboxTab", "#a855f7");
+  const [activeTab, setActiveTab] = useState<Tab>("All");
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#000" }} edges={["top"]}>
       <ScrollView contentContainerStyle={{ paddingBottom: 120, paddingHorizontal: 20 }}>
@@ -22,85 +26,72 @@ export default function Inbox() {
           </Text>
         </Animated.View>
 
-        <Animated.View
-          entering={FadeInUp.duration(400).delay(100)}
-          style={{ flexDirection: "row", gap: 10, marginTop: 18 }}
-        >
-          {TABS.map((t, i) => (
-            <View
-              key={t}
-              style={{
-                paddingHorizontal: 14,
-                paddingVertical: 7,
-                borderRadius: 14,
-                borderWidth: 1,
-                borderColor: i === 0 ? "rgba(168,85,247,0.4)" : "rgba(255,255,255,0.12)",
-                backgroundColor: i === 0 ? "rgba(168,85,247,0.14)" : "transparent",
-              }}
-            >
-              <Text style={{ color: i === 0 ? "#fff" : "rgba(255,255,255,0.55)", fontSize: 12, fontWeight: "600" }}>
-                {t}
-              </Text>
-            </View>
-          ))}
-        </Animated.View>
-
-        <View style={{ marginTop: 24, gap: 12 }}>
-          {[0, 1, 2, 3].map((i) => (
-            <Animated.View
-              key={i}
-              entering={FadeInDown.duration(400).delay(140 + i * 50)}
-              style={{
-                flexDirection: "row",
-                gap: 12,
-                padding: 14,
-                borderRadius: 16,
-                borderWidth: 1,
-                borderColor: "rgba(255,255,255,0.08)",
-                backgroundColor: "rgba(255,255,255,0.03)",
-              }}
-            >
-              <View
+        <Animated.View entering={FadeInUp.duration(400).delay(100)} style={{ flexDirection: "row", gap: 10, marginTop: 18 }}>
+          {TABS.map((t) => {
+            const isActive = t === activeTab;
+            return (
+              <PressableScale
+                key={t}
+                haptic="selection"
+                onPress={() => setActiveTab(t)}
                 style={{
-                  width: 44,
-                  height: 44,
-                  borderRadius: 22,
-                  backgroundColor: "rgba(168,85,247,0.15)",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  paddingHorizontal: 14,
+                  paddingVertical: 7,
+                  borderRadius: 14,
+                  borderWidth: 1,
+                  borderColor: isActive ? `${ACCENT}66` : "rgba(255,255,255,0.12)",
+                  backgroundColor: isActive ? `${ACCENT}22` : "transparent",
                 }}
               >
-                <Svg width={18} height={18} viewBox="0 0 24 24" fill="none">
-                  <Circle cx={12} cy={9} r={3} stroke={ACCENT} strokeWidth={1.6} />
-                  <Path d="M5 20a7 7 0 0114 0" stroke={ACCENT} strokeWidth={1.6} strokeLinecap="round" />
-                </Svg>
-              </View>
-              <View style={{ flex: 1 }}>
-                <Text style={{ color: "#fff", fontSize: 13, fontWeight: "600" }}>placeholder_user</Text>
-                <Text style={{ color: "rgba(255,255,255,0.6)", fontSize: 12, marginTop: 2 }}>
-                  Sample notification — wire real data after Supabase `notifications` table lands.
+                <Text style={{ color: isActive ? "#fff" : "rgba(255,255,255,0.55)", fontSize: 12, fontWeight: "600" }}>
+                  {t}
                 </Text>
-              </View>
-              <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 11 }}>2h</Text>
-            </Animated.View>
-          ))}
-        </View>
+              </PressableScale>
+            );
+          })}
+        </Animated.View>
 
-        <View
-          style={{
-            marginTop: 28,
-            padding: 16,
-            borderRadius: 16,
-            borderWidth: 1,
-            borderColor: "rgba(168,85,247,0.25)",
-            backgroundColor: "rgba(168,85,247,0.06)",
-          }}
+        <Animated.View
+          entering={FadeInDown.duration(500).delay(200)}
+          style={{ marginTop: 60, alignItems: "center", paddingHorizontal: 30 }}
         >
-          <Text style={{ color: ACCENT, fontSize: 11, letterSpacing: 2, fontWeight: "700" }}>SAFETY DEFAULT</Text>
-          <Text style={{ color: "#fff", fontSize: 13, marginTop: 6, lineHeight: 18 }}>
-            For accounts &lt;18: DMs are followers-only, image filtering on, report &amp; block one tap away.
+          <View
+            style={{
+              width: 72,
+              height: 72,
+              borderRadius: 36,
+              backgroundColor: `${ACCENT}1f`,
+              borderWidth: 1,
+              borderColor: `${ACCENT}4d`,
+              alignItems: "center",
+              justifyContent: "center",
+              marginBottom: 18,
+            }}
+          >
+            <Svg width={30} height={30} viewBox="0 0 24 24" fill="none">
+              <Path
+                d="M4 7a3 3 0 013-3h10a3 3 0 013 3v8a3 3 0 01-3 3h-7l-4 3v-3H7a3 3 0 01-3-3V7z"
+                stroke={ACCENT}
+                strokeWidth={1.6}
+                strokeLinejoin="round"
+              />
+            </Svg>
+          </View>
+          <Text style={{ color: "#fff", fontSize: 17, fontWeight: "700", textAlign: "center" }}>Nothing here yet</Text>
+          <Text style={{ color: "rgba(255,255,255,0.5)", fontSize: 13, marginTop: 8, textAlign: "center", lineHeight: 20 }}>
+            When people react to your posts, follow you, or message you, it'll show up here.
           </Text>
-        </View>
+        </Animated.View>
+
+        <Animated.View
+          entering={FadeInDown.duration(400).delay(320)}
+          style={{ marginTop: 40, padding: 16, borderRadius: 16, borderWidth: 1, borderColor: `${ACCENT}40`, backgroundColor: `${ACCENT}0f` }}
+        >
+          <Text style={{ color: ACCENT, fontSize: 11, letterSpacing: 2, fontWeight: "700" }}>SAFETY</Text>
+          <Text style={{ color: "#fff", fontSize: 13, marginTop: 6, lineHeight: 18 }}>
+            For accounts under 18: DMs are followers-only, image filtering on, report & block one tap away.
+          </Text>
+        </Animated.View>
       </ScrollView>
     </SafeAreaView>
   );

@@ -9,6 +9,7 @@ import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { runOnJS } from "react-native-reanimated";
 import PressableScale from "../../components/PressableScale";
 import { trackScreen } from "../../lib/store";
+import { useAccent } from "../../lib/themeContext";
 
 type TabDef = { name: string; label: string; center?: boolean };
 const TABS: readonly TabDef[] = [
@@ -19,12 +20,8 @@ const TABS: readonly TabDef[] = [
   { name: "profile", label: "Profile" },
 ];
 
-// Legacy screens that still exist as files but are no longer in the tab bar.
-// Accessible via direct routes (e.g., /spaces from Profile).
 const HIDDEN_TABS = ["spaces", "legacy", "me"];
 
-// Right-edge swipe-to-KOI: gesture activates only when the user pans leftward
-// from within EDGE_ZONE px of the right edge and crosses DRAG_THRESHOLD px.
 const EDGE_ZONE = 18;
 const DRAG_THRESHOLD = 70;
 
@@ -39,8 +36,6 @@ export default function TabsLayout() {
   const edgeSwipe = useMemo(
     () =>
       Gesture.Pan()
-        // Only steal the touch once it has clearly moved leftward 12+ px.
-        // Right-direction pans never activate, so horizontal scroll views are safe.
         .activeOffsetX([-12, 9999])
         .onEnd((e) => {
           "worklet";
@@ -69,13 +64,7 @@ export default function TabsLayout() {
       </Tabs>
       <GestureDetector gesture={edgeSwipe}>
         <View
-          style={{
-            position: "absolute",
-            right: 0,
-            top: 0,
-            bottom: 0,
-            width: EDGE_ZONE,
-          }}
+          style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: EDGE_ZONE }}
           collapsable={false}
           pointerEvents="auto"
         />
@@ -88,6 +77,8 @@ function CustomTabBar({ state, navigation }: { state: any; navigation: any }) {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const activeName = state.routes[state.index]?.name as string | undefined;
+  const navAccent = useAccent("navAccent", "#a855f7");
+  const tabBarTint = useAccent("tabBar", "rgba(10,8,20,0.72)");
 
   useEffect(() => {
     if (activeName) trackScreen(activeName);
@@ -107,8 +98,8 @@ function CustomTabBar({ state, navigation }: { state: any; navigation: any }) {
           borderRadius: 28,
           overflow: "hidden",
           borderWidth: 1,
-          borderColor: "rgba(168,85,247,0.18)",
-          backgroundColor: "rgba(10,8,20,0.72)",
+          borderColor: `${navAccent}30`,
+          backgroundColor: tabBarTint,
           shadowColor: "#000",
           shadowOpacity: 0.6,
           shadowRadius: 20,
@@ -154,9 +145,9 @@ function CustomTabBar({ state, navigation }: { state: any; navigation: any }) {
                       borderRadius: 28,
                       overflow: "hidden",
                       borderWidth: 1.5,
-                      borderColor: "rgba(168,85,247,0.6)",
+                      borderColor: `${navAccent}99`,
                       marginTop: -22,
-                      shadowColor: "#a855f7",
+                      shadowColor: navAccent,
                       shadowOpacity: 0.65,
                       shadowRadius: 18,
                       shadowOffset: { width: 0, height: 0 },
@@ -166,7 +157,7 @@ function CustomTabBar({ state, navigation }: { state: any; navigation: any }) {
                     }}
                   >
                     <LinearGradient
-                      colors={["#a855f7", "#7c3aed"]}
+                      colors={[navAccent, `${navAccent}99`]}
                       start={{ x: 0, y: 0 }}
                       end={{ x: 1, y: 1 }}
                       style={{ position: "absolute", inset: 0 } as any}
@@ -195,14 +186,14 @@ function CustomTabBar({ state, navigation }: { state: any; navigation: any }) {
                         height: 2,
                         width: 24,
                         borderRadius: 1,
-                        backgroundColor: "#a855f7",
-                        shadowColor: "#a855f7",
+                        backgroundColor: navAccent,
+                        shadowColor: navAccent,
                         shadowOpacity: 0.9,
                         shadowRadius: 8,
                       }}
                     />
                   )}
-                  <TabIcon name={tab.name} active={isActive} />
+                  <TabIcon name={tab.name} active={isActive} accent={navAccent} />
                   <Text
                     style={{
                       color: isActive ? "#fff" : "rgba(255,255,255,0.4)",
@@ -223,7 +214,7 @@ function CustomTabBar({ state, navigation }: { state: any; navigation: any }) {
   );
 }
 
-function TabIcon({ name, active }: { name: string; active: boolean }) {
+function TabIcon({ name, active, accent }: { name: string; active: boolean; accent: string }) {
   const color = active ? "#fff" : "rgba(255,255,255,0.45)";
   switch (name) {
     case "home":
@@ -234,7 +225,7 @@ function TabIcon({ name, active }: { name: string; active: boolean }) {
             stroke={color}
             strokeWidth={1.6}
             strokeLinejoin="round"
-            fill={active ? "rgba(168,85,247,0.18)" : "none"}
+            fill={active ? `${accent}30` : "none"}
           />
         </Svg>
       );
