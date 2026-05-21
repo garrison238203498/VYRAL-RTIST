@@ -1,22 +1,23 @@
 // Profile — public-facing identity + private AI Spaces entry point.
-// AI Spaces and Legacy are gated below the public profile surface.
-
-import { ScrollView, Text, View } from "react-native";
+import { useState } from "react";
+import { Modal, ScrollView, Text, View } from "react-native";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
 import Svg, { Path, Circle, Rect } from "react-native-svg";
 import PressableScale from "../../components/PressableScale";
+import PersonalizeSheet from "../../components/PersonalizeSheet";
 import { useAuth } from "../../lib/auth";
-
-const ACCENT = "#a855f7";
-const ACCENT_DEEP = "#7c3aed";
+import { useAccent } from "../../lib/themeContext";
 
 export default function Profile() {
   const router = useRouter();
   const { user, signOut } = useAuth();
+  const ACCENT = useAccent("profileOrb", "#a855f7");
+  const ACCENT_DEEP = "#7c3aed";
   const handle = user?.email?.split("@")[0] ?? "you";
+  const [showPersonalize, setShowPersonalize] = useState(false);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#000" }} edges={["top"]}>
@@ -74,7 +75,11 @@ export default function Profile() {
           entering={FadeInUp.duration(500).delay(120)}
           style={{ flexDirection: "row", gap: 10, marginTop: 22, paddingHorizontal: 20 }}
         >
-          <PressableScale haptic="light" style={{ flex: 1, borderRadius: 14, overflow: "hidden" }}>
+          <PressableScale
+            haptic="light"
+            onPress={() => router.push("/me" as any)}
+            style={{ flex: 1, borderRadius: 14, overflow: "hidden" }}
+          >
             <LinearGradient
               colors={[ACCENT, ACCENT_DEEP]}
               start={{ x: 0, y: 0 }}
@@ -86,20 +91,21 @@ export default function Profile() {
           </PressableScale>
           <PressableScale
             haptic="light"
+            onPress={() => setShowPersonalize(true)}
             style={{
               flex: 1,
               borderRadius: 14,
               borderWidth: 1,
-              borderColor: "rgba(255,255,255,0.18)",
+              borderColor: `${ACCENT}66`,
               paddingVertical: 11,
               alignItems: "center",
+              backgroundColor: `${ACCENT}12`,
             }}
           >
-            <Text style={{ color: "#fff", fontSize: 13, fontWeight: "600" }}>Share Profile</Text>
+            <Text style={{ color: "#fff", fontSize: 13, fontWeight: "600" }}>Personalize</Text>
           </PressableScale>
         </Animated.View>
 
-        {/* Posts grid placeholder */}
         <Animated.View
           entering={FadeInDown.duration(500).delay(180)}
           style={{ marginTop: 28, paddingHorizontal: 20 }}
@@ -131,7 +137,6 @@ export default function Profile() {
           </Text>
         </Animated.View>
 
-        {/* Private tools section */}
         <Animated.View
           entering={FadeInDown.duration(500).delay(240)}
           style={{ marginTop: 32, paddingHorizontal: 20 }}
@@ -210,6 +215,10 @@ export default function Profile() {
           </PressableScale>
         </Animated.View>
       </ScrollView>
+
+      <Modal visible={showPersonalize} animationType="slide" transparent onRequestClose={() => setShowPersonalize(false)}>
+        <PersonalizeSheet onClose={() => setShowPersonalize(false)} />
+      </Modal>
     </SafeAreaView>
   );
 }

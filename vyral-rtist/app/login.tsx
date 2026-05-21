@@ -11,7 +11,7 @@ import { useAuth } from "../lib/auth";
 
 export default function Login() {
   const router = useRouter();
-  const { signInWithPassword, signUp, configured } = useAuth();
+  const { signInWithPassword, signUp } = useAuth();
   const [mode, setMode] = useState<"sign-in" | "sign-up">("sign-in");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -40,7 +40,13 @@ export default function Login() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#000" }}>
+      <LinearGradient
+        colors={["#0a0010", "#05000a", "#000"]}
+        start={{ x: 0.5, y: 0 }}
+        end={{ x: 0.5, y: 1 }}
+        style={{ position: "absolute", inset: 0 } as any}
+      />
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={{ flex: 1, paddingHorizontal: 22, paddingTop: 24, justifyContent: "center" }}>
           <Animated.View entering={FadeInUp.duration(600)} style={{ marginBottom: 30 }}>
@@ -157,11 +163,6 @@ export default function Login() {
                 Skip for now
               </Text>
             </Pressable>
-            {!configured && (
-              <Text style={{ color: colors.textLo, fontSize: 11, textAlign: "center", marginTop: 8 }}>
-                Supabase isn't configured locally — using dev mode.
-              </Text>
-            )}
           </Animated.View>
         </View>
       </TouchableWithoutFeedback>
