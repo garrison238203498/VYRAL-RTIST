@@ -5,32 +5,32 @@ import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { View } from "react-native";
 import { AuthProvider, useAuth } from "../lib/auth";
+import { ThemeProvider } from "../lib/themeContext";
 import AmbientBackground from "../components/AmbientBackground";
 
 export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1, backgroundColor: "#05060d" }}>
       <SafeAreaProvider>
-        <AuthProvider>
-          <View style={{ flex: 1, backgroundColor: "#05060d" }}>
-            <AmbientBackground />
-            <AuthGate />
-            <StatusBar style="light" />
-          </View>
-        </AuthProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            <View style={{ flex: 1, backgroundColor: "#05060d" }}>
+              <AmbientBackground />
+              <AuthGate />
+              <StatusBar style="light" />
+            </View>
+          </AuthProvider>
+        </ThemeProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );
 }
 
-// Renders the stack; redirects unauthenticated users to /login when Supabase is configured.
 function AuthGate() {
   const { user, loading, configured } = useAuth();
 
-  // While loading + Supabase configured, show nothing (the Boot screen flashes via index).
   if (loading && configured) return null;
 
-  // When Supabase isn't configured at all, let the user roam — dev preview mode.
   if (!configured) {
     return (
       <Stack

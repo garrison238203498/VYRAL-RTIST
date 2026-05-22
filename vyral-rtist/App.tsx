@@ -20,6 +20,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
+import Reanimated, { FadeInDown as RFadeInDown } from "react-native-reanimated";
+import PressableScale from "./components/PressableScale";
 
 import { GeneratedVisualLoading, LoadingScreen } from "./app-system/components/loading/LoadingScreens";
 import { MotionPreview } from "./app-system/components/motion/MotionPreview";
@@ -504,9 +506,26 @@ function OnboardingFlow({ initial, onComplete }: { initial: OnboardingProfile; o
         <PrimaryButton label={step === screens.length - 1 ? "Enter VYRAL" : step === 0 ? "Begin" : "Next"} onPress={step === screens.length - 1 ? complete : () => setStep(step + 1)} />
       </View>
       <View style={styles.dots}>
-        {screens.map((_, index) => <View key={index} style={[styles.dot, index === step && styles.dotActive]} />)}
+        {screens.map((_, index) => <Dot key={index} active={index === step} />)}
       </View>
     </ScrollView>
+  );
+}
+
+function Dot({ active }: { active: boolean }) {
+  const width = useRef(new Animated.Value(active ? 22 : 7)).current;
+  useEffect(() => {
+    Animated.spring(width, { toValue: active ? 22 : 7, useNativeDriver: false, friction: 6, tension: 80 }).start();
+  }, [active, width]);
+  return (
+    <Animated.View
+      style={{
+        width,
+        height: 7,
+        borderRadius: 4,
+        backgroundColor: active ? "#26d6e8" : "rgba(247,247,255,0.22)",
+      }}
+    />
   );
 }
 
@@ -773,11 +792,20 @@ function VCoreNav({ mode, open, onOpen, onClose, onMode }: { mode: ModeKey; open
               const item = modes[key];
               const positions = [{ top: 0, left: 104 }, { left: 0, bottom: 0 }, { right: 0, bottom: 0 }];
               return (
-                <Pressable key={key} style={[styles.radialCard, positions[index], mode === key && { borderColor: item.accent }]} onPress={() => onMode(key)}>
-                  <Ionicons name={item.icon} size={24} color={item.accent} />
-                  <Text style={styles.radialTitle}>{item.label}</Text>
-                  <Text style={styles.radialSub}>{item.subtitle}</Text>
-                </Pressable>
+                <Reanimated.View
+                  key={key}
+                  entering={RFadeInDown.duration(220).delay(index * 55)}
+                  style={[{ position: "absolute" }, positions[index]]}
+                >
+                  <Pressable
+                    style={[styles.radialCard, mode === key && { borderColor: item.accent }]}
+                    onPress={() => onMode(key)}
+                  >
+                    <Ionicons name={item.icon} size={24} color={item.accent} />
+                    <Text style={styles.radialTitle}>{item.label}</Text>
+                    <Text style={styles.radialSub}>{item.subtitle}</Text>
+                  </Pressable>
+                </Reanimated.View>
               );
             })}
           </View>
@@ -959,29 +987,41 @@ function ChipGrid({ values, selected, onToggle }: { values: string[]; selected: 
 }
 
 function ToggleLine({ label, value, onPress }: { label: string; value: boolean; onPress: () => void }) {
+  const thumbX = useRef(new Animated.Value(value ? 20 : 0)).current;
+  useEffect(() => {
+    Animated.spring(thumbX, { toValue: value ? 20 : 0, useNativeDriver: true, friction: 6, tension: 80 }).start();
+  }, [value, thumbX]);
   return (
     <Pressable onPress={onPress} style={styles.toggleLine}>
       <Text style={styles.toggleLabel}>{label}</Text>
-      <View style={[styles.toggle, value && styles.toggleOn]}><View style={[styles.toggleThumb, value && styles.toggleThumbOn]} /></View>
+      <View style={[styles.toggle, value && styles.toggleOn]}>
+        <Animated.View
+          style={[
+            styles.toggleThumb,
+            value && { backgroundColor: "#b7f75a" },
+            { transform: [{ translateX: thumbX }] },
+          ]}
+        />
+      </View>
     </Pressable>
   );
 }
 
 function PrimaryButton({ label, onPress, icon }: { label: string; onPress: () => void; icon?: keyof typeof Ionicons.glyphMap }) {
   return (
-    <Pressable onPress={onPress} style={styles.primaryButton}>
+    <PressableScale onPress={onPress} haptic="light" style={styles.primaryButton}>
       {icon && <Ionicons name={icon} size={18} color="#07101b" />}
       <Text style={styles.primaryText}>{label}</Text>
-    </Pressable>
+    </PressableScale>
   );
 }
 
 function SecondaryButton({ label, onPress, icon }: { label: string; onPress: () => void; icon?: keyof typeof Ionicons.glyphMap }) {
   return (
-    <Pressable onPress={onPress} style={styles.secondaryButton}>
+    <PressableScale onPress={onPress} haptic="light" style={styles.secondaryButton}>
       {icon && <Ionicons name={icon} size={18} color="#f7f7ff" />}
       <Text style={styles.secondaryText}>{label}</Text>
-    </Pressable>
+    </PressableScale>
   );
 }
 
@@ -1051,8 +1091,6 @@ const styles = StyleSheet.create({
   onboardingBody: { color: "rgba(247,247,255,0.7)", fontSize: 15, lineHeight: 22 },
   onboardingButtons: { flexDirection: "row", gap: 10 },
   dots: { flexDirection: "row", justifyContent: "center", gap: 8 },
-  dot: { width: 7, height: 7, borderRadius: 4, backgroundColor: "rgba(247,247,255,0.22)" },
-  dotActive: { backgroundColor: "#26d6e8", width: 22 },
   chipGrid: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
   chip: { borderRadius: 999, borderWidth: 1, borderColor: "rgba(255,255,255,0.1)", backgroundColor: "rgba(255,255,255,0.045)", paddingHorizontal: 11, paddingVertical: 8 },
   chipActive: { backgroundColor: "rgba(38,214,232,0.15)", borderColor: "rgba(38,214,232,0.34)" },
@@ -1063,7 +1101,6 @@ const styles = StyleSheet.create({
   toggle: { width: 48, height: 28, borderRadius: 14, backgroundColor: "rgba(255,255,255,0.12)", padding: 3 },
   toggleOn: { backgroundColor: "rgba(183,247,90,0.42)" },
   toggleThumb: { width: 22, height: 22, borderRadius: 11, backgroundColor: "rgba(247,247,255,0.72)" },
-  toggleThumbOn: { transform: [{ translateX: 20 }], backgroundColor: "#b7f75a" },
   miniFormation: { height: 190, borderRadius: 28, borderWidth: 1, borderColor: "rgba(255,255,255,0.1)", backgroundColor: "rgba(5,8,22,0.62)", padding: 14, justifyContent: "center", gap: 8 },
   miniChip: { alignSelf: "flex-start", borderRadius: 999, backgroundColor: "rgba(255,255,255,0.08)", color: "rgba(247,247,255,0.72)", paddingHorizontal: 12, paddingVertical: 7, fontWeight: "800", fontSize: 12 },
   miniSpace: { alignSelf: "flex-end", borderRadius: 18, borderWidth: 1, borderColor: "rgba(183,247,90,0.34)", backgroundColor: "rgba(183,247,90,0.12)", padding: 13 },
@@ -1096,7 +1133,7 @@ const styles = StyleSheet.create({
   transitionGlass: { ...StyleSheet.absoluteFillObject },
   navOverlay: { ...StyleSheet.absoluteFillObject, zIndex: 20, alignItems: "center", justifyContent: "flex-end", paddingBottom: 108 },
   radial: { width: 316, height: 252 },
-  radialCard: { position: "absolute", width: 108, height: 108, borderRadius: 28, borderWidth: 1, borderColor: "rgba(255,255,255,0.12)", backgroundColor: "rgba(5,8,22,0.78)", alignItems: "center", justifyContent: "center", gap: 5, padding: 10 },
+  radialCard: { width: 108, height: 108, borderRadius: 28, borderWidth: 1, borderColor: "rgba(255,255,255,0.12)", backgroundColor: "rgba(5,8,22,0.78)", alignItems: "center", justifyContent: "center", gap: 5, padding: 10 },
   radialTitle: { color: "#f7f7ff", fontSize: 13, fontWeight: "900", letterSpacing: 1.3 },
   radialSub: { color: "rgba(247,247,255,0.48)", fontSize: 10, textAlign: "center" },
   coreSafe: { position: "absolute", left: 0, right: 0, bottom: 0, zIndex: 30, alignItems: "center" },
