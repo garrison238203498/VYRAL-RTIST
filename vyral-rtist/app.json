@@ -9,6 +9,7 @@
     "newArchEnabled": true,
     "assetBundlePatterns": ["**/*"],
     "ios": {
+      "bundleIdentifier": "com.vyral.rtist",
       "supportsTablet": true,
       "infoPlist": {
         "NSCameraUsageDescription": "Vyral uses the camera to capture handwritten notes, sketches, and study material into your Spaces.",
@@ -17,6 +18,7 @@
       }
     },
     "android": {
+      "package": "com.vyral.rtist",
       "permissions": [
         "CAMERA",
         "VIBRATE",

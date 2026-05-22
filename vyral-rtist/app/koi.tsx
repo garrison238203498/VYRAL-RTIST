@@ -27,6 +27,7 @@ import Animated, {
   withRepeat,
   withTiming,
 } from "react-native-reanimated";
+import PressableScale from "../components/PressableScale";
 
 const C = {
   bg0: "#050b14",
@@ -90,7 +91,8 @@ function NavBar({ onBack }: { onBack: () => void }) {
         <BrandMark />
         <Text style={{ color: C.ink0, fontSize: 20, fontWeight: "600", letterSpacing: 0.3 }}>KOI</Text>
       </View>
-      <Pressable
+      <PressableScale
+        haptic="light"
         onPress={onBack}
         style={{
           paddingHorizontal: 12,
@@ -102,7 +104,7 @@ function NavBar({ onBack }: { onBack: () => void }) {
         }}
       >
         <Text style={{ color: C.accent, fontSize: 12, fontWeight: "600" }}>← Back to Vyral</Text>
-      </Pressable>
+      </PressableScale>
     </View>
   );
 }
@@ -161,7 +163,8 @@ function Hero() {
       </Text>
 
       <View style={{ flexDirection: "row", gap: 10, marginTop: 22 }}>
-        <Pressable
+        <PressableScale
+          haptic="light"
           style={{
             paddingHorizontal: 16,
             paddingVertical: 12,
@@ -176,8 +179,9 @@ function Hero() {
           <Text style={{ color: C.bg0, fontSize: 13, fontWeight: "700", letterSpacing: 0.3 }}>
             Join the closed beta →
           </Text>
-        </Pressable>
-        <Pressable
+        </PressableScale>
+        <PressableScale
+          haptic="light"
           style={{
             paddingHorizontal: 16,
             paddingVertical: 12,
@@ -188,7 +192,7 @@ function Hero() {
           }}
         >
           <Text style={{ color: C.ink0, fontSize: 13, fontWeight: "600" }}>Watch gameplay ▸</Text>
-        </Pressable>
+        </PressableScale>
       </View>
 
       <View style={{ flexDirection: "row", marginTop: 28, gap: 0, justifyContent: "space-between" }}>
@@ -261,7 +265,6 @@ function Pond() {
             strokeWidth={2}
             strokeLinecap="round"
           />
-          {/* Ripple nodes */}
           {[
             [180, 200],
             [350, 320],
@@ -273,7 +276,6 @@ function Pond() {
               <Circle cx={cx} cy={cy} r={22} fill="none" stroke={C.accent} strokeOpacity={0.15} />
             </G>
           ))}
-          {/* Koi */}
           <G transform="translate(258, 245)">
             <Ellipse cx={14} cy={9} rx={20} ry={7} fill="#ffffff" />
             <Ellipse cx={8} cy={9} rx={7} ry={5} fill={C.koiRed} />
@@ -284,7 +286,6 @@ function Pond() {
         </Svg>
       </Animated.View>
 
-      {/* HUD pills */}
       <View style={{ flexDirection: "row", gap: 8, marginTop: -12 }}>
         <HudPill label="Flow state" value="charged" tone="accent" />
         <HudPill label="Streak" value="14,820" tone="warm" />
@@ -695,7 +696,7 @@ function Mech({ num, name, desc }: { num: string; name: string; desc: string }) 
 
 function Loop() {
   const nodes = [
-    { glyph: "≋", name: "Flow", desc: "Guide the koi. Earn rhythm points and rare drops." },
+    { glyph: "≈≈≈", name: "Flow", desc: "Guide the koi. Earn rhythm points and rare drops." },
     { glyph: "◌", name: "Wave", desc: "Defend the pond. Unlock control cards and fragments." },
     { glyph: "◇", name: "Collect", desc: "Forge cards, refine your deck, trade across Vyral." },
     { glyph: "⟳", name: "Match", desc: "Play Evyre. Wins feed back into new minigame modes." },
@@ -772,7 +773,8 @@ function CTA() {
         embossed starter card, honored in the eventual physical print.
       </Text>
       <View style={{ flexDirection: "row", gap: 10, marginTop: 20 }}>
-        <Pressable
+        <PressableScale
+          haptic="light"
           style={{
             paddingHorizontal: 18,
             paddingVertical: 12,
@@ -781,8 +783,9 @@ function CTA() {
           }}
         >
           <Text style={{ color: C.bg0, fontSize: 13, fontWeight: "700" }}>Request beta access →</Text>
-        </Pressable>
-        <Pressable
+        </PressableScale>
+        <PressableScale
+          haptic="light"
           style={{
             paddingHorizontal: 16,
             paddingVertical: 12,
@@ -792,7 +795,7 @@ function CTA() {
           }}
         >
           <Text style={{ color: C.ink0, fontSize: 13, fontWeight: "600" }}>Browse spoilers</Text>
-        </Pressable>
+        </PressableScale>
       </View>
     </View>
   );
